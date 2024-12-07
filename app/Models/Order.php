@@ -16,6 +16,6 @@ class Order extends Model
 
     public function concessions()
     {
-        return $this->belongsToMany(Concession::class, 'concession_order');
+        return $this->belongsToMany(Concession::class, 'concession_order')->withTrashed();
     }
 }

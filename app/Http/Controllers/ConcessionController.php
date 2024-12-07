@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\ConcessionRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
 
 class ConcessionController extends Controller
 {
@@ -77,9 +78,14 @@ class ConcessionController extends Controller
     }
 
     // The id of a single concession is parsed in from the view finally to the delete method in repo
+    // The relevant image is also deleted
     // After that it is redirected to the index function
     public function destroy($id)
     {
+        $concession = $this->concessionRepository->find($id);
+        if ($concession->image) {
+            Storage::disk('public')->delete($concession->image); // Assuming the image path is stored in 'image' column
+        }
         $this->concessionRepository->delete($id);
         return redirect()->route('concessions.index');
     }

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('concession_order', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('concession_id')->references('id')->on('concessions');
-            $table->timestamps();
+        Schema::table('concessions', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('concession_order');
+        Schema::table('concessions', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };
